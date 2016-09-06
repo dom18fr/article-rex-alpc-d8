@@ -60,9 +60,9 @@ Su ALPC nous l'avons peu utilisé, le seul exemple est le formulaire d'inscripti
 
 ### 4.1 - Render arrays & logique d'assemblage
 
-D8 integre TWIG en lieu et place de phpTemplate. Et c'est bien.  
-Le twig embarqué dans drupal est un twig etendu, enrichi de nombreuses fonctions dédiés.
-Contrairement à phpTemplate, twig est intimement lié aux mécanismes de rendu de drupal. Concretement celà signifie que twig peut non seulement printer des chaînes, comme il le fait naturellement au sein de n'importe quel framework, mais il est également capable d'invoquer, de manière transparente la render API de drupal. Autrement dit, TWIG peut printer des render arrays.
+D8 intégre Twig en lieu et place de phpTemplate. Et c'est bien.  
+Le Twig embarqué dans Drupal est un Twig étendu, enrichi de nombreuses fonctions dédiées.
+Contrairement à phpTemplate, Twig est intimement lié aux mécanismes de rendu de Drupal. Concrètement cela signifie que Twig peut afficher des chaînes, comme il le fait naturellement au sein de n'importe quel framework, et est également capable d'invoquer, de manière transparente la *render API* de Drupal. Autrement dit, Twig peut rendre/afficher des render arrays.
 
 Par exemple dans un template de node comme :
 
@@ -73,21 +73,21 @@ Par exemple dans un template de node comme :
 </article>
 ```
 
-`title` contient une chaîne, et `content` contient un render array (incluant tous les champs) produit par le view_mode du node.
+`title` contient une chaîne et `content` contient un render array (incluant tous les champs) produit par le view_mode du node.
 
-Le fait que twig sache gérer les render array implique qu'une grande partie de la logique d'assemblage des templates se fait dans les render arrays. Ce n'est pas (ou rarement) au sein d'un template que l'on va appeler un sous template avec un include.  
+Le fait que Twig sache gérer les render array implique qu'une grande partie de la logique d'assemblage des templates se fait dans les render arrays. Ce n'est pas (ou rarement) au sein d'un template que l'on va appeler un sous template avec un include.  
 
-Dans des cas d'assemblage 1 template parent / multiple templates enfants, comme typiquement le template de node vu plus haut, le template parent "reçoit" un render array contenant des enfants (les champs du node par exemple), et le print tout simplement. La render API reprend alors la main et fait appel aux templates des champs pour resoudre le render array.
+Dans des cas d'assemblage 1 template parent / multiple templates enfants, comme typiquement le template de node vu plus haut, le template parent "reçoit" un render array contenant des enfants (les champs du node par exemple), et l'affiche tout simplement. La render API reprend alors la main et fait appel aux templates des champs pour résoudre le render array.
 
-En bref, twig ne porte pas la logique d'assemblage contrairement à l'usage qui peut en être fait dans d'autres frameworks.
+En bref, Twig ne porte pas la logique d'assemblage contrairement à l'usage qui peut en être fait dans d'autres frameworks.
 
-Les avantages sont mulitples : 
+Les avantages sont multiples :
 
-  * Simplicité des templates : ils sont nombreux (si peu mutualisés) mais très atomique, donc courts et lisibles.
-  * Maintient complet de la logique de suggestion de templates, chaque template de chaque element aussi petit soit il a son propre template, lequel template peut être choisis en fonction du contexte parmis un ensemble par convention de nommage. Ce qui rend le systeme très flexible.
-  * Si la logique d'assemblage n'est pas écrite en dur dans les templates, il devient possible d'exposer à la contribution des mécanisme de layout avancé (view_modes, panels, paragraphs etc ...)
+  * Simplicité des templates : ils sont nombreux (si peu mutualisés) mais très atomiques, donc courts et lisibles.
+  * Maintient complet de la logique de suggestions de templates, chaque template de chaque élement aussi petit soit-il a son propre template, lequel peut être choisi en fonction du contexte parmis un ensemble par convention de nommage. Ce qui rend le système très flexible.
+  * Si la logique d'assemblage n'est pas écrite en dur dans les templates, il devient possible d'exposer à la contribution des mécanismes de layouts avancés (view_modes, panels, paragraphs etc ...)
 
-Exemple d'un enssemble de template pour le rendu d'un node dans le projet ALPC :
+Exemple d'un ensemble de templates pour le rendu d'un node dans le projet ALPC :
 
 Arborescence :
 
@@ -128,7 +128,7 @@ node
 
 ### 4.2 - Attributes
 
-Le twig de drupal inclut également la gestion d'une objet de type `Attributes`. Il s'agit d'une structure portant des attributs html. Cette objet expose de multiples méthodes permettant de manipuler des attributs à la volée au moment de les printer.
+Le Twig de Drupal inclut également la gestion d'une objet de type `Attributes`. Il s'agit d'une structure portant des attributs html. Cet objet expose de multiples méthodes permettant de manipuler des attributs à la volée au moment de les afficher.
 
 Par exemple, le template des titres secondaires dans les articles d'ALPC :
 
@@ -143,18 +143,18 @@ En Drupal 7, ce type de manipulation devait se faire dans un preprocess en php.
 
 ### 4.3 - Laissons les dev front travailler et les contributeurs contribuer !
 
-D'une manière générale l'intégration de twig et son imbrication dans la render API de Drupal permet une grande souplesse de contribution, y compris s'agissant du layout des éléments, et ce sans franchir la frontière (interdite) de la contribution de html et css en back-office. Il devient possible (plus encore qu'en D7) de déléguer aux contributeurs la construction du puzzle et aux dev front la responsabilité du design des pièces.
+D'une manière générale l'intégration de Twig et son imbrication dans la render API de Drupal permet une grande souplesse de contribution, y compris s'agissant du layout des éléments, et ce sans franchir la frontière (interdite) de la contribution de html et css en back-office. Il devient possible (plus encore qu'en D7) de déléguer aux contributeurs la construction du puzzle et aux dev front la responsabilité du design des pièces.
 
-Par ailleurs, le theme drupal peut désormais être entièrement géré par les dev front, sans connaissances particuliere de Drupal ou même de PHP.  
-La ou en D7, une tres large partie du code php custom d'un projet se trouvait dans le theme, en D8 le thème peut (doit) être consistué exclusivement de Templates Twig, de feuilles de style, de fichiers js et d'assets (images, svg, json etc...)
+Par ailleurs, le thème Drupal peut désormais être entièrement géré par les dev front, sans connaissances particulières de Drupal ou même de PHP.  
+Là où en D7 une tres large partie du code PHP custom d'un projet se trouvait dans le thème, en D8 le thème peut (doit) être constitué exclusivement de Templates Twig, de feuilles de style, de fichiers js et d'assets (images, svg, json etc...)
 
 Amis intégrateurs, les seules prérequis sont :
 
   * Accepter que la logique d'assemblage n'est pas (ou peu) dans les templates.
-  * Connaitre les grands principes de cette logique d'assemblage (tres atomisé).
-  * Connaitre les quelques extensions TWIG spécifiques à Drupal.
+  * Connaître les grands principes de cette logique d'assemblage (tres atomisé).
+  * Connaître les quelques extensions Twig spécifiques à Drupal.
 
-Sur ALPC, pour des raisons de planing principalement, nous n'avons pas pu mettre en oeuvre ce principe, ce sont les dev Drupal qui se sont chargé d'écrire les templates à partir d'une intégration statique réalisée en amont. Par ailleurs, le thème alpc embarque malheureusement quelque lignes de code php.  
+Sur ALPC, pour des raisons de planning principalement, nous n'avons pas pu mettre en œuvre ce principe, ce sont les dev Drupal qui se sont chargés d'écrire les templates à partir d'une intégration statique réalisée en amont. Par ailleurs, le thème ALPC embarque malheureusement quelques lignes de code PHP.  
 Mais la prochaine fois c'est la bonne :)
 
 ## 5 - Composer
