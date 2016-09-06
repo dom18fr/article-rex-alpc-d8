@@ -240,21 +240,21 @@ Pour la vérité historique, j'ai moi même lamentablement échoué a faire marc
 
 ### 8.1 - WYSIWYG Sucks, paragraphs rocks !
 
-Rien de véritablement spécifique à Drupal 8 ici, l'excelent module `paragraphs` existe en D7. Mais a ma connaissance, il a été jusqu'ici peu utilisé chez Clever.
+Rien de véritablement spécifique à Drupal 8 ici, l'excellent module `paragraphs` existe en D7. Mais à ma connaissance, il a été jusqu'ici peu utilisé chez Clever Age.
 
-Le principe étant de proposer une contribution structurée en paragraphs représentant des briques de contrib ayant leur propre champs / layouts. Les paragraphs sont des entités embarqués au sein des nodes (ou d'autres entités), leur création / suppression / edition se fait directement au sein du formulaire d'edition de l'entité hôte.
+Le principe étant de proposer une contribution structurée en paragraphes représentant des briques de contrib ayant leurs propres champs / layouts. Les paragraphes sont des entités embarquées au sein des nodes (ou d'autres entités), leur création / suppression / édition se fait directement au sein du formulaire d'édition de l'entité hôte.
 
-La quasi totalité de la contribution sur ALPC se fait au travers de paragraphs, autorisant les contributeurs à créer et organiser des structures HTML complexes sans connaissance particuliere ni recours au WYSIWYG.
+La quasi totalité de la contribution sur ALPC se fait au travers de paragraphes, autorisant les contributeurs à créer et organiser des structures HTML complexes sans connaissance particulière ni recours au WYSIWYG.
 
-Nous avons conservé un WYSIWYG minimaliste, pour faire du gras, de l'italique, des listes à puces et des tableaux. Pour toutes les autres structures, des plus simples (titre h2, texte) au plus complexes (carrousel, accordeon) les contributeurs ont recours à la cration d'un paragraphe.
+Nous avons conservé un WYSIWYG minimaliste, pour faire du gras, de l'italique, des listes à puces et des tableaux. Pour toutes les autres structures, des plus simples (titre h2, texte) au plus complexes (carrousel, accordéon) les contributeurs ont recours à la création d'un paragraphe.
 
-Nous avions envisagé en début de projet de ne pas mettre de WYSIWYG du tout, de se contenter d'un interpreteur Markdown, mais la réalité de la maquette, des contenus a contribuer et des profiles de contributeurs parfois tres peu a l'aise avec ce type d'outils nous ont amené à utiliser un CKEditor restreint.
+Nous avions envisagé en début de projet de ne pas mettre de WYSIWYG du tout, de se contenter d'un interpréteur Markdown, mais la réalité de la maquette, des contenus à contribuer et des profils de contributeurs parfois très peu a l'aise avec ce type d'outils nous ont amené à utiliser un CKEditor restreint.
 
 ### 8.2 - paragraphs D8, résolument moderne
 
-Si paragraphs existe en D7, notons toutefois que les équipes de dev ont fait un tres beau travail d'intégration au modèle des entités dans la version D8. En effet paragraph D7 est un fork (assez ancien) d'un autre module du même type (`field_collection`) et souffre a cet égard d'une dette technique dans la modélisation de la relation entre le paragraph et son contenu parent, qui rend difficile et parfois impossible, la traduction, la gestion des revisions, la migration ou l'integration dans un workflow des contenus.
+Si *Paragraphs* existe en D7, notons toutefois que les équipes de dev ont fait un très beau travail d'intégration au modèle des entités dans la version D8. En effet paragraph D7 est un fork (assez ancien) d'un autre module du même type (`field_collection`) et souffre a cet égard d'une dette technique dans la modélisation de la relation entre le paragraphe et son contenu parent, qui rend difficile et parfois impossible, la traduction, la gestion des révisions, la migration ou l'intégration dans un workflow des contenus.
 
-En D8, la relation hote / paragraph est modélisée par un champ entityreference (en fait une version modifié du champ entityreference, entityreference_revision), ce qui en fait un type de relation intégrée de manière tres homogène à la l'API Drupal.
+En D8, la relation hôte / paragraphe est modélisée par un champ EntityReference (en fait une version modifié du champ entityreference, entityreference_revision), ce qui en fait un type de relation intégrée de manière très homogène à la l'API Drupal.
 
 ## 9 - Style et organisation de code
 
