@@ -185,47 +185,47 @@ Il y aura peut être un article KB sur cet outil prochainement.
 
 ### 6.1 - Des formulaires d'entité
 
-D8 introduit un nouveau modèle de formulaires de contact. Les contact form de D8 sont contribuables, il est possible de définir les champs du formulaire depuis le BO.
+D8 introduit un nouveau modèle de formulaires de contact. Les contact forms de D8 sont contribuables, il est possible de définir les champs du formulaire depuis le BO.
 
 Dans l'histoire de Drupal (depuis D7 en tout cas), 2 approches différentes ont existé pour créer des formulaires en BO.
 
-* Le modele "Webform", qui fournit des types de champs pour sa propre API, gère la construction du formulaire, son rendu en front, sa logique de validation et de soumission ainsi que la persistance des données soumise de manière spécifique.
-* Le modele "EntityForm", qui s'appuit sur les concepts d'entité et de champs existant dans le core de Drupal. En effet, les formulaires utilisés pour la contribution des entités sont finalement des formulaire dont on gère la structure en back-office. C'est encore plus vrai avec l'arrivé des form modes de D8.
+* Le modèle "Webform", qui fournit des types de champs pour sa propre API, gère la construction du formulaire, son rendu en front, sa logique de validation et de soumission ainsi que la persistance des données soumises de manière spécifique.
+* Le modèle "EntityForm", qui s'appuie sur les concepts d'entité et de champs existants dans le cœur de Drupal. En effet, les formulaires utilisés pour la contribution des entités sont finalement des formulaires dont on gère la structure en back-office. C'est encore plus vrai avec l'arrivé des form modes de D8.
 
-Contact Form est un module du core de Drupal 8 qui s'inscrit dans la continuité de EntityForm, les formulaires de contact sont en fait des entités dont on expose le formulaire d'édition en front.
+Contact Form est un module du cœur de Drupal 8 qui s'inscrit dans la continuité de EntityForm, les formulaires de contact sont en fait des entités dont on expose le formulaire d'édition en front.
 
 Cette approche permet une utilisation totale des concepts liés aux champs des entités (notions de widget, validateurs, rendu, form modes, theming, stockage en base etc ...)
 
-A noter toutefois que la persitance des données en base n'est pas (encore) native, par défaut, les formulaires ne font qu'envoyer un mail. Toutefois, le module contrib `contact_storage` complète `contact_form` pour disposer de véritables entités persistantes.
+A noter toutefois que la persistance des données en base n'est pas (encore) native. Par défaut les formulaires ne font qu'envoyer un mail comme le fait le module Contact dans Drupal 7. Le module contrib `contact_storage` complète `contact_form` pour disposer de véritables entités persistantes.
 
-Sur ALPC nous avons utilisé des contact form pour tous les formulaires exposés en front. Le formulaire de contact biensûr, mais également le formulaire d'inscription à la newsletter, le formulaire d'inscription aux notification d'agenda et communiqués de presse, un formulaire de recherche rapide et le formulaire de dépôt d'offres d'emploi.
+Sur ALPC nous avons utilisé des contact forms pour tous les formulaires exposés en front. Le formulaire de contact bien sûr, mais également le formulaire d'inscription à la newsletter, le formulaire d'inscription aux notifications d'agenda et communiqués de presse, un formulaire de recherche rapide et le formulaire de dépôt d'offres d'emploi.
 
-Ces formulaires sont très différents, et pour certains assez ambitieux niveau front / UX :
-  
+Ces formulaires sont très différents et pour certains assez ambitieux niveau front / UX :
+
   * Soumission / Validation AJAX
   * Visibilité des champs modifiés à la volée
-  * Autocomplete branché sur elasticsearch
+  * Autocomplete branché sur ElasticSearch
   * Affichage en popin
   * Intégration HTML / CSS 100% custom
 
-Dans l'ensemble, contact form nous a permis de faire tout ça, en écrivant un peu de code, mais toujours en exploitant les API natives de drupal, pas de js ou de php custom qui réinvente la roue.
+Dans l'ensemble, contact form nous a permis de faire tout ça, en écrivant un peu de code, mais toujours en exploitant les API natives de Drupal, pas de JS ou de PHP custom qui réinvente la roue.
 
 ### 6.2 - Too much
 
-Contact form en fait même un peu trop au bout du compte. En effet le module a vraiment été conçu pour des formulaires de contact, et il existe donc par défaut des champs qui ne sont pas utiles dans le cadre des formulaires d'un autre type. Ce n'est pas tres grave, on peut utiliser les form modes pour choisir les champs que l'on souhaite exploiter.  
+Contact form en fait même un peu trop au bout du compte. En effet le module a vraiment été conçu pour des formulaires de contact. Il existe donc par défaut des champs qui ne sont pas utiles dans le cadre des formulaires d'un autre type. Ce n'est pas très grave car on peut utiliser les form modes pour choisir les champs que l'on souhaite exploiter.  
 
-Plus gênant en revanche, la soumission d'un formulaire de contact **doit** envoyer un mail, c'est en dur dans le core, et de surcroit envoyer un mail à une adresse dont la saisie est obligatoire lors de la définition du formulaire.  
-Dans le cas d'ALPC le seul formulaires dont on avait besoin qu'il envoit effectivement des mails (le formulaire de contact du site) devait exposer un champ dans lequel le visiteur pourrait choisir un service de la region, comme destinataire de son message. Impossible donc d'exploiter le mécanisme natif d'envoi de mail.  
-Il a donc fallu empecher le mail de partir, et réimplementer une logique d'envois de mail parallèlement.  
-(A cette occasion, nous avons essayé de nous appuyer sur `rules` pour le déclenchement de l'envois du mail, mais sans succès, `rules` est encore bien trop instable)
+Plus gênant en revanche, la soumission d'un formulaire de contact **doit** envoyer un mail, c'est en dur dans le cœur, et de surcroît envoyer un mail à une adresse dont la saisie est obligatoire lors de la définition du formulaire.  
+Dans le cas d'ALPC le seul formulaires dont on avait besoin qu'il envoi effectivement des mails (le formulaire de contact du site) devait exposer un champ dans lequel le visiteur pourrait choisir un service de la région comme destinataire de son message. Impossible donc d'exploiter le mécanisme natif d'envoi de mail.  
+Il a donc fallu empêcher le mail de partir, et réimplémenter une logique d'envoi de mails parallèlement.  
+(A cette occasion, nous avons essayé de nous appuyer sur `rules` pour le déclenchement de l'envoi du mail, sans succès. `Rules` est encore bien trop instable.)
 
 ### 6.3 - Webform ? Yamlform ? Eform ?
 
-Avec le recul, ce genre de petits soucis me font penser que `contact_form` devra évoluer vers plus de souplesse à l'avenir et integrer nativement `contact_storage` pour que son usage devienne aussi courant que l'était webform en D6 et D7.
+Avec le recul, ce genre de petits soucis me font penser que `contact_form` devra évoluer vers plus de souplesse à l'avenir et intégrer nativement `contact_storage` pour que son usage devienne aussi courant que l'était webform en D6 et D7.
 
-Une autre alternative si `contact_form` n'étend pas son périmètre, serait d'utiliser le module `eform` (le nom du projet `entityform` porté en D8), dont la vocation est de couvrir complètement le besoin des formulaires contribués.
+Une autre alternative, si `contact_form` n'étend pas son périmètre, serait d'utiliser le module `eform` (le nom du projet `entityform` porté en D8), dont la vocation est de couvrir complètement le besoin des formulaires contribués.
 
-A noter enfin que webform ne sera probablement pas porté en D8, mais qu'il existe le projet `yamlform`, semblable dans l'approche (n'utilisant pas les entités et leur champs, mais sa propre api).
+A noter enfin que webform ne sera probablement pas porté en D8, mais qu'il existe le projet `yamlform`, semblable dans l'approche (n'utilisant pas les entités et leur champs, mais sa propre API).
 
 ## 7 - Migrate
 
