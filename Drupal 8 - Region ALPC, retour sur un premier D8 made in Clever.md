@@ -229,12 +229,12 @@ A noter enfin que webform ne sera probablement pas porté en D8, mais qu'il exis
 
 ## 7 - Migrate
 
-Le module `migrate` est dans le core de Drupal !  
-Et c'est une bonne nouvelle. Cependant, à l'heure actuelle (drupal-8.1.x), le module est au statut "experimental". Les équipes de dev de migrate et de drupal core se sont concentrés dans un premier temps sur la migration complète depuis un D6 ou un D7, laissant les migrations custom un peu de côté dans un premier temps.
+Le module `Migrate` est dans le cœur de Drupal !  
+Et c'est une bonne nouvelle. Cependant, à l'heure actuelle (drupal-8.1.x), le module est au statut "experimental". Les équipes de dev de Migrate et de Drupal core se sont concentrées dans un premier temps sur la migration complète depuis un D6 ou un D7, laissant les migrations custom un peu de côté dans un premier temps.
 
-Même si tout n'était pas encore stabilisé dans migrate, sur le projet ALPC nous avons pu l'utiliser pour mettre en place un import automatisé de contenu "communiqués de presse" à partir d'un flux XML.
+Même si tout n'était pas encore stabilisé dans Migrate, sur le projet ALPC nous avons pu l'utiliser pour mettre en place un import automatisé de contenu "communiqués de presse" à partir d'un flux XML.
 
-Pour la vérité historique, j'ai moi même lamantablement échoué a faire marcher ce migrate tout frais, et il aura fallu l'intervention héroïque d'un JYGastaud  plus déterminé que jamais, jonglant brillamment entre modules contribs et libraries en version de dev, pour que la synchro migrate finisse par faire le boulot ;)
+Pour la vérité historique, j'ai moi même lamentablement échoué a faire marcher ce Migrate tout frais. Il aura fallu l'intervention héroïque d'un JYGastaud  plus déterminé que jamais, jonglant brillamment entre modules contribs et libraries en version de dev, pour que la synchro Migrate finisse par faire le boulot ;)
 
 ## 8 - Paragraphs & WYSIWYG
 
