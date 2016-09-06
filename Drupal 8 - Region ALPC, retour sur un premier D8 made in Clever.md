@@ -1,65 +1,65 @@
 # Drupal 8 - Region ALPC, retour sur un premier D8 made in Clever
 
-Petit tour d'horizon des nouveautés D8 (et de leur petits pièges) qui se sont trouvées sur notre route lors de la réalisation de [http://www.laregion-alpc.fr](http://www.laregion-alpc.fr)
+Petit tour d'horizon des nouveautés D8 (et de leurs petits pièges) qui se sont trouvées sur notre route lors de la réalisation de [http://www.laregion-alpc.fr](http://www.laregion-alpc.fr)
 
-## 1 - Symfony2 & POO 
+## 1 - Symfony2 & POO
 
-Drupal 8 utilise beaucoup de composants Symfony. Pour autant ce n'est pas une application Symfony full stack (comme EZ publish 5/6 par exemple). Un certains nombre de concepts (notament dans la modélisation des contenus) n'ont pas été "symfonyfiés" (ce mot existe. Si, c'est vrai.)  
+Drupal 8 utilise beaucoup de composants Symfony. Pour autant ce n'est pas une application Symfony full stack (comme EZ publish 5/6 par exemple). Un certain nombre de concepts (notament dans la modélisation des contenus) n'ont pas été "symfonyfiés" (ce mot existe. Si, c'est vrai.).  
 
-Cependant, la totalité de la base de code du core (et de la grande majorité des modules contrib portés et stables en D8) a été repensée / réécrite en POO.  
+Cependant, la totalité de la base de code du cœur (et de la grande majorité des modules contrib portés et stables en D8) a été repensée / réécrite en POO.  
 
-Pour developper en Drupal 8, sans être obligé de savoir vraiment faire du symfony, il est tout de même préférable de maîtriser les notions de :
+Pour développer en Drupal 8, sans être obligé de savoir vraiment faire du Symfony, il est tout de même préférable de maîtriser les notions de :
 
-  * Injection de dépendance et services symfony
-  * Structures et syntaxe des fichiers de conf en .yml
+  * Injection de dépendances et services symfony
+  * Structure et syntaxe des fichiers de conf en .yml
   * Annotations
   * Syntaxe TWIG
 
 Plus généralement, il faut avoir les bases de la POO php :
 
-  * Classes abstraite et héritage
-  * Interface
-  * Methode static / protected / public
+  * Classes abstraites et héritage
+  * Interfaces
+  * Méthodes static / protected / public
 
-Même si ça à l'air d'un gros morceau a avaler pour qui n'aurait fait que du drupal 6/7 jusque là (et donc quasiment pas de POO), ça n'a rien d'insurmontable. Ça n'a en tout cas pas posé de problème particulier sur ALPC, parmis les devs il y avait 1 Symfoniste confirmé et 2 drupalistes.
+Même si ça à l'air d'un gros morceau à avaler pour qui n'aurait fait que du drupal 6/7 jusque là (et donc quasiment pas de POO), ça n'a rien d'insurmontable. Ça n'a en tout cas pas posé de problème particulier sur ALPC, parmi les devs il y avait 1 Symfoniste confirmé et 2 drupalistes.
 
-## 2 - Les blocks
+## 2 - Les blocs
 
 ### 2.1 - Plugin baby !
 
-En Drupal 8, la notion de block a pas mal évolué en Drupal 8, tant dans les concepts que dans le code.
+En Drupal 8, la notion de bloc a pas mal évolué en Drupal 8, tant dans les concepts que dans le code.
 
-En D7 un block est un fragment de contenu, déclaré dans un hook et disponible pour être placé dans une region du thème. Un block donné ne peut apparaître qu'en un seul exemplaire, et dans une seule région.
-Ce mécanisme limité peut être étendu en utilisant des modules contrib comme context, panel ou display suite.
+En D7 un bloc est un fragment de contenu, déclaré dans un hook et disponible pour être placé dans une région du thème. Un bloc donné ne peut apparaître qu'en un seul exemplaire et dans une seule région.
+Ce mécanisme limité peut être étendu en utilisant des modules contrib comme context, panels ou display suite.
 
-Drupal 8 a intégré la souplesse de gestion des blocks apportée par les modules cités plus haut dans le core en utilisant le duo plugin + config entity.
+Drupal 8 a intégré la souplesse de gestion des blocs apportée par les modules cités plus haut dans le cœur en utilisant le duo plugin + config entity.
 
-Le plugin est d'abord définit dans le code, puis une fois le plugin block disponible dans l'interface, on peut le "placer" dans une région pour un thème donné, surcharger son titre, et ajuster les settings (visibilité par exemple). C'est a ce moment la qu'une instance de config entity est crée en base. La config entity contient toutes les infos relatives au placement du plugin block.
+Le plugin est d'abord défini dans le code, puis une fois le plugin *block* disponible dans l'interface, on peut le "placer" dans une région pour un thème donné, surcharger son titre et ajuster les settings (visibilité par exemple). C'est à ce moment là qu'une instance de config entity est créée en base. La config entity contient toutes les infos relatives au placement du plugin *block*.
 
 On peut créer plusieurs config entities pour un même plugin, avec des settings différents à chaque fois.
 
 ### 2.2 - Custom block (block_content)
 
-En Drupal 7 il n'est pas possible nativement de créer des blocks configurables auxquels on attache des champs. C'est un besoin assez courant auquel repondent les modules contrib `nodeblock` et plus récemment (et plus proprement) `bean`.  
+En Drupal 7 il n'est pas possible nativement de créer des blocs configurables auxquels on attache des champs. C'est un besoin assez courant auquel répondent les modules contrib `nodeblock` et plus récemment (et plus proprement) `bean`.  
 
-Là encore drupal 8 a intégré cette problématique dans le core. Il s'agit quasiment d'un port du module `bean` sous le nom de *Custom Block* (nom machine `block_content`).
+Là encore drupal 8 a intégré cette problématique dans le cœur. Il s'agit quasiment d'un port du module `bean` sous le nom de *Custom Block* (nom machine `block_content`).
 
-le module *Custom Block* definit le type d'entité `block_content`. Il est possible de créer des types de blocks (analogues aux type de contenus) auxquels on attache des champs pour la contrib. Ensuite, chaque `block_content` créé donne lieu à la création d'un plugin block. Il est donc possible de placer un block contribué comme un block definit dans le code.
+Le module *Custom Block* definit le type d'entité `block_content`. Il est possible de créer des types de blocs (analogues aux type de contenus) auxquels on attache des champs pour la contribution. Ensuite, chaque `block_content` créé donne lieu à la création d'un plugin *block*. Il est donc possible de placer un bloc contribué comme un bloc définit dans le code.
 
-Par exemple sur ALPC, les blocks image cliquables visibles dans le menu principal, dans la sidebar des articles et au bas de la page d'accueils sont des `block_content`.
+Par exemple sur ALPC, les blocs image cliquables visibles dans le menu principal, dans la sidebar des articles et au bas de la page d'accueil sont des `block_content`.
 
 ## 3 - Form modes
 
-Le form mode est l'équivalent du view_mode côté formulaire. Autrement dit il s'agit d'une structure qui stock, pour un bundle donné (type de cotenu, type de block etc...), la visibilité, l'ordre d'apparition et le widget de chaque champs.  
+Le form mode est l'équivalent du view_mode côté formulaire. Autrement dit il s'agit d'une structure qui stocke, pour un bundle donné (type de contenu, type de bloc etc...), la visibilité, l'ordre d'apparition et le widget de chaque champs.  
 
-Il devient donc possible de créer plusieurs visualisations possible d'un même formulaire d'entité.  
+Il devient donc possible de créer plusieurs visualisations d'un même formulaire d'entité.  
 
-Su ALPC nous l'avons peu utilisé, le seul exemple est le formulaire d'inscription à la newsletter qui apparait sous une forme différente en homepage et sur les articles. 
+Su ALPC nous l'avons peu utilisé, le seul exemple est le formulaire d'inscription à la newsletter qui apparaît sous une forme différente en homepage et sur les articles.
 
 ## 4 - {{ TWIG }}
 
 ### 4.1 - Render arrays & logique d'assemblage
- 
+
 D8 integre TWIG en lieu et place de phpTemplate. Et c'est bien.  
 Le twig embarqué dans drupal est un twig etendu, enrichi de nombreuses fonctions dédiés.
 Contrairement à phpTemplate, twig est intimement lié aux mécanismes de rendu de drupal. Concretement celà signifie que twig peut non seulement printer des chaînes, comme il le fait naturellement au sein de n'importe quel framework, mais il est également capable d'invoquer, de manière transparente la render API de drupal. Autrement dit, TWIG peut printer des render arrays.
