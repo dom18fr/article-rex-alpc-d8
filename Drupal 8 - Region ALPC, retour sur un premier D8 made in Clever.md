@@ -260,17 +260,17 @@ En D8, la relation hôte / paragraphe est modélisée par un champ EntityReferen
 
 ### 9.1 - POO
 
-Jusqu'à la version 7, Drupal était un framework essentiellement procédurale, on n'y trouvait quasiment pas de notions de programation orientée objet. Par ailleurs, drupal utilisait peu de libraries externes et n'avait donc pas de véritable gestion des dependances.  
-Drupal 8 s'intègre dans un écosysteme php, tirant avantage de dépendances externes, à commencer par Symfony2.  
-La quasi totalités des fonctions utilisées en drupal 7 ont été restructurée et réécrite en POO.
+Jusqu'à la version 7, Drupal était un framework essentiellement procédurale, on n'y trouvait quasiment pas de notions de programmation orientée objet. Par ailleurs, Drupal utilisait peu de libraries externes et n'avait donc pas de véritable gestion des dépendances.  
+Drupal 8 s'intègre dans un écosystème PHP, tirant avantage de dépendances externes, à commencer par Symfony2.  
+La quasi totalité des fonctions utilisées en Drupal 7 ont été restructurées et réécrites en POO.
 
-Par exemple, obtenir le node courant en D7 : 
+Par exemple, obtenir le node courant en D7 :
 
 ```php
 $node = menu_get_object('node');
 ```
 
-En D8 : 
+En D8 :
 
 ```php
 $node = \Drupal::request()->attributes->get('node');
@@ -287,12 +287,12 @@ En D8 :
 ```php
 $rendered_html = \Drupal::service('renderer')->render($render_array);
 ```
-La nature des entités (nodes, taxonomy term, users etc...) a également changé. En D7 les entités étaient déjà des objects mais non typés, il s'agissait de standard class, ne portant aucune méthodes.
+La nature des entités (nodes, taxonomy term, users etc...) a également changé. En D7 les entités étaient déjà des objets mais non typés, il s'agissait de standard class, ne portant aucune méthode.
 
 En D8 les entités de contenu comme les nodes, les block_content, les paragraphs etc... sont des instances de classes héritant toute d'une de `\Drupal\Core\Entity\ContentEntityBase`, et implémentant l'interface `\Drupal\Core\Entity\EntityInterface`. Ces classes exposent donc des méthodes permettant la manipulation des objets.  
-Pour faire l'analogie avec les outils D7, on peut dire que les fonctions disponible en utilisant `entity_metadata_wrapper`, sont maitenant disponible directement dans un objet `$entity`.
+Pour faire l'analogie avec les outils D7, on peut dire que les fonctions disponibles en utilisant `entity_metadata_wrapper`, sont maitenant disponibles directement dans un objet `$entity`.
 
-Pour récupérer la valuer d'un champ d'un node en Drupal 7 : 
+Pour récupérer la valeur d'un champ d'un node en Drupal 7 :
 
 ```php
 $items = field_get_item('node', $node, 'field_text');
@@ -305,7 +305,7 @@ $wrapper = entity_metadata_wrapper('node', $node);
 $value = $wrapper->field_text->value();
 ```
 
-En drupal 8, nativement :
+En Drupal 8, nativement :
 
 ```php
 $value = $node->get('field_text')->first()->value()['value'];
@@ -313,29 +313,29 @@ $value = $node->get('field_text')->first()->value()['value'];
 
 ### 9.2 - Où sont les hooks ?
 
-En Drupal 7, tout est **hook**. Les hooks servent à la fois à déclarer des données (hook souvent suffix par info), à déclencher des actions un moment particulier, et à altérer des données ou des structures html en cours de production (render arrays).  
+En Drupal 7, tout est **hook**. Les hooks servent à la fois à déclarer des données (hook souvent suffixé par *_info*), à déclencher des actions un moment particulier et à altérer des données ou des structures HTML en cours de production (render arrays).  
 
-En Drupal 8, un certain nombre de hook ont été abandonnés au profit de méthodes plus usuelles en Symfony.
+En Drupal 8, un certain nombre de hooks ont été abandonnés au profit de méthodes plus usuelles en Symfony.
 
 #### 9.2.1 - Annotations & fichiers Yaml
 
-Les hook "déclaratifs" ou presque tous disparu en D8, on utilise en remplacement soit des classes annotées ou des fichiers en configuration en .yml
+Les hooks "déclaratifs" ont presque tous disparu en D8. On utilise en remplacement soit des classes annotées ou des fichiers en configuration en .yml
 
-En drupal 7, un block était définit par :
+En Drupal 7, un bloc était défini par :
 
 ```php
 
 function module_block_info() {
-  
+
   return array(
     'info' => 'alpc_logo_block',
   );
 }
 
 function module_block_view($delta) {
-  
+
   if ('alpc_logo_block' === $delta) {
-    
+
     $block = array(
       'subject' => t('Alpc Logo Block'),
       'content' => array(
@@ -348,7 +348,7 @@ function module_block_view($delta) {
 }
 ```
 
-En drupal 8, déclaration d'un block en utilisant les annotations :
+En Drupal 8, déclaration d'un bloc en utilisant les annotations :
 
 ```php
 <?php
@@ -382,16 +382,16 @@ class AlpcLogoBlock extends BlockBase {
 }
 ```
 La présence de cette class définit un plugin block comme évoqué en 2.1.
-Elle joue les rôles des hook_block_info et hook_block_view de Drupal 7. La déclaration passe par les annotations et le contenu du block est retourné par la methode build().
+Elle joue les rôles des hook_block_info et hook_block_view de Drupal 7. La déclaration passe par les annotations et le contenu du bloc est retourné par la methode build().
 
-En drupal 7, la déclaration d'une route se faisait par l'implémentation du hook_menu.
+En Drupal 7, la déclaration d'une route se faisait par l'implémentation du hook_menu.
 
 Exemple, en D7 :
 
 ```php
 
 function module_menu() {
-  
+
   return array(
     'custom-page' => array(
       'title' => t('Custom page'),
@@ -402,14 +402,14 @@ function module_menu() {
 }
 
 function _module_custom_page() {
-  
+
   return array(
     '#markup' => 'here the custom content',
   );
 }
 ```
 
-En Drupal 8, le hook_menu n'existe plus, il a été remplacé par un fichier .yml et les 'page callback' sont devenus controllers. Un exemple tiré du projet alpc, une route renvoyant un contenu destiné à être rendu dans une popin :
+En Drupal 8, le hook_menu n'existe plus, il a été remplacé par un fichier .yml et les 'page callback' sont devenus des *controllers*. Un exemple tiré du projet ALPC, une route renvoyant un contenu destiné à être rendu dans une popin :
 
 `alpc_common.routing.yml`
 
@@ -435,33 +435,33 @@ use Drupal\Core\Controller\ControllerBase;
 class AlpcCommonController extends ControllerBase{
 
   public function alpcCommonSubscribePopin() {
-	
+
 	$content = ... // construit le render array du contenu
-	
+
 	return $content;
   }
 }
 ```
 
-#### 9.2.2 - Evenements
+#### 9.2.2 - Evénements
 
-S'agissant des hooks dont l'objet est de déclencher une action à un moment particulier, Symfony integre un mécanisme permettant celà, il s'agit des evenements. Les evenements symfony ne repose pas sur une convention de nommage de fonction, mais sur des services tagés.
+S'agissant des hooks dont l'objet est de déclencher une action à un moment particulier, Symfony intègre un mécanisme permettant cela, il s'agit des événements. Les événements Symfony ne reposent pas sur une convention de nommage de fonction mais sur des services tagués.
 
-Nous n'avons pas utilisé d'évènements pour le projet ALPC, nous n'en avons pas eu besoin, peu de hook ayant été abandonnés au profit du système d'évènements. Certains problèmes de performance n'ont pas encore été résolu et par ailleurs, une part de la communauté des developpeurs Drupal est encore réticente du fait de la verbosité du code nécessaire en comparaison des hooks drupal.
+Nous n'avons pas utilisé d'événements pour le projet ALPC, nous n'en avons pas eu besoin, peu de hooks ayant été abandonnés au profit du système d'événements. Certains problèmes de performance n'ont pas encore été résolus et par ailleurs, une part de la communauté des développeurs Drupal est encore réticente du fait de la verbosité du code nécessaire en comparaison des hooks Drupal.
 
-Toutefois, il est probable qu'à l'avenir de plus en plus de hook seront abandonnés ou dépreciés au profit d'evenements.
+Toutefois, il est probable qu'à l'avenir de plus en plus de hooks seront abandonnés ou dépréciés au profit d'événements.
 
-### 9.3 - Services symfony
+### 9.3 - Services Symfony
 
-Les services symfony sont des classes, déclarées dans des fichiers yaml. Une fois un service déclaré, il devient possible de l'appeler en utilisant le container de service. Dans l'exemple vu plus haut :
+Les services Symfony sont des classes déclarées dans des fichiers yaml. Une fois un service déclaré, il devient possible de l'appeler en utilisant le container de service. Dans l'exemple vu plus haut :
 
 ```php
 $rendered_html = \Drupal::service('renderer')->render($render_array);
 ```
 
-Le rendu d'un render array est assuré par la methode `render` du service `renderer`.
+Le rendu d'un render array est assuré par la méthode `render` du service `renderer`.
 
-La déclaration d'un service par un module se fait dans le fichier `nom_du_module.services.yml`. Un exemple sur alpc :
+La déclaration d'un service par un module se fait dans le fichier `nom_du_module.services.yml`. Un exemple sur ALPC :
 
 ```yaml
 parameters:
@@ -472,10 +472,10 @@ services:
     arguments: ['%alpc_home.extrafields.conf%']
 ```
 
-Les services déclarés sont instanciés à l'initialisation d'une requête php, et tout ce dont ils ont besoin pour fonctionner leur est passé à ce moment là, c'est l'injection de dépendance. Il est possible d'injecter de la configuration ou en core d'autres services.
+Les services déclarés sont instanciés à l'initialisation d'une requête PHP, et tout ce dont ils ont besoin pour fonctionner leur est passé à ce moment là, c'est l'injection de dépendances. Il est possible d'injecter de la configuration ou encore d'autres services.
 
-Les services symfony permettent notament d'organiser le code source Drupal de manière assez lisible. Lorsque que notre fichier .module commence à devenir trop gros (et même avant que ça n'arrive), il est préférable de séparer notre code dans des services, que nous appelons depuis notre fichier .module.  
-C'est une alternative à l'usage des fichiers .inc présentant l'avantage de regler le problème de l'ordre de chargement des fichier par l'injection de dependance.  
+Les services Symfony permettent notamment d'organiser le code source Drupal de manière assez lisible. Lorsque que notre fichier .module commence à devenir trop gros (et même avant que cela arrive), il est préférable de séparer notre code dans des services, que nous appelons depuis notre fichier .module.  
+C'est une alternative à l'usage des fichiers .inc présentant l'avantage de régler le problème de l'ordre de chargement des fichiers par l'injection de dépendances.  
 
 Exemple d'appel au service `alpc_home.xfield_manager ` pour la déclaration et le rendu d'extrafields :
 
@@ -520,7 +520,7 @@ On pourrait ainsi imaginer que le fichier .module d'un module D8 ne soit compos�
 
 ### 9.4 - Structure d'un module
 
-La structure d'un module Drupal a évoulé :
+La structure d'un module Drupal a évolué :
 
 ```
 module_name
@@ -549,22 +549,22 @@ module_name
 |__ module_name.libraries.yml
 ```
 
-* Le fichier .info de Drupal 7 devient .info.yml il s'agit donc d'un fichier descriptif en yml. Il est cependant relativement semblable à la version D7 dans sa structure.
+* Le fichier .info de Drupal 7 devient .info.yml : il s'agit donc d'un fichier descriptif en yaml. Il est cependant relativement semblable à la version D7 dans sa structure.
 
-* Le fichier .module est en tout point ressemblant à sa version D7. Il s'agit d'un simple fichier php, dans lequel on écrit des fonctions procédurales.
+* Le fichier .module est en tout point ressemblant à sa version D7. Il s'agit d'un simple fichier PHP dans lequel on écrit des fonctions procédurales.
 
-* Les fichiers .services|routing|libraries.yml sont des fichiers de configuration Symfony, ils sont lus au runtime et leur contenu n'est jamais écrit en base de donnée.
+* Les fichiers .services|routing|libraries.yml sont des fichiers de configuration Symfony. Ils sont lus au runtime et leur contenu n'est jamais écrit en base de données.
 
-* Le repertoire **config** contient des fichiers de configuration Drupal, ils sont lus et **écrits en base** lors de l'installation du module (install) ou lors de l'installation du module qui les contient ou du module dont ils dépendent (optionnal).
+* Le répertoire **config** contient des fichiers de configuration Drupal, ils sont lus et **écrits en base** lors de l'installation du module (install) ou lors de l'installation du module qui les contient ou du module dont ils dépendent (optionnal).
 
-* Le repertoire **src** contient des classes. Les services et les controllers sont déclarés dans les fichiers de conf Symfony, les plugins (comme les blocks et les field formatters, mais il en existe d'autres) sont déclarés par annotation.
+* Le répertoire **src** contient des classes. Les services et les controllers sont déclarés dans les fichiers de conf Symfony, les plugins (comme les blocks et les field formatters, mais il en existe d'autres) sont déclarés par annotation.
 
 ### 9.5 - Les libraries
 
-En Drupal 8, les fichiers css ou js sont inclus au travers de libraries. Il n'est pas possible d'inclure un fichier css ou js directement, le fichier doit être déclaré dans le .libraries.yml du module comme un element d'un librarie, et c'est ensuite la library entière (qui peut contenir de la css et du js) qui est appelée dans le code, en utilisant la clée '#attached' d'un render array.
+En Drupal 8, les fichiers CSS ou JS sont inclus au travers de libraries. Il n'est pas possible d'inclure un fichier CSS ou JS directement, le fichier doit être déclaré dans le .libraries.yml du module comme un élément d'une library. C'est ensuite la library entière (qui peut contenir du CSS et du JS) qui est appelée dans le code, en utilisant la clé '#attached' d'un render array.
 
 ```php
-  
+
 return [
   '#theme' => 'image',
   '#uri' => 'public://img.jpg',
@@ -575,10 +575,10 @@ return [
     ],    
   ],
 ];
-  
+
 ```
 
-### 9.6 - Sructure d'un thème
+### 9.6 - Structure d'un thème
 
 ```
 nom_theme
@@ -591,7 +591,7 @@ nom_theme
 
 * Le fichier .info.yml est assez semblable au .info de D7.  
 
-* Le fichier .libraries.yml est identique à ce que l'on a vu pour les modules, notons touteois que les libraries peuvent être inclues par un theme en utilisant une fonction twig : 
+* Le fichier .libraries.yml est identique à ce que l'on a vu pour les modules. Notons toutefois que les libraries peuvent être inclues par un thème en utilisant une fonction Twig :
 
 ```twig
 {{ attach_library('nom_module|theme/mon_library') }}
@@ -611,7 +611,7 @@ libraries:
   - alpc/alpc-commons
 ```
 
-* Le fichier nom_theme.theme est équivalent au fichier template.php que l'on trouvait dans les themes D7. Il s'agit d'un fichier php dans lequel on écrit des fonction procédurales. Toutefois, comme évoqué en 4.3, il est préférable de ne pas utiliser ce fichier, les themes D8 n'ont pas vocation à contenir du php, ce pour faciliter leur prise en main direct par les dev front.
+* Le fichier nom_theme.theme est équivalent au fichier template.php que l'on trouvait dans les thèmes D7. Il s'agit d'un fichier PHP dans lequel on écrit des fonction procédurales. Toutefois, comme évoqué en 4.3, il est préférable de ne pas utiliser ce fichier. Les thèmes D8 n'ont pas vocation à contenir du PHP afin de faciliter leurs prises en main directes par les dev front.
 
 ## 10 - Le(s) cache(s) de Drupal 8
 
