@@ -161,25 +161,25 @@ Mais la prochaine fois c'est la bonne :)
 
 ### 5.1 - Composer dans le core de D8 !
 
-Parmis les nouveautés D8, on trouve l'integration de composer. On est encore au début de l'histoire, mais c'est prometeur.
-En réalité c'est surtout le core de Drupal 8 qui utilise composer pour ses dépendances, mais lorsque l'on télécharge le core de drupal, on récupère un ensemble de sources, incluant les dépendances du core dans un repertoire vendor.
+Parmi les nouveautés D8, on trouve l'intégration de Composer. On est encore au début de l'histoire mais c'est déjà prometteur.
+En réalité c'est surtout le cœur de Drupal 8 qui utilise Composer pour ses dépendances, mais lorsque l'on télécharge le cœur de Drupal, on récupère un ensemble de sources, incluant les dépendances du cœur dans un répertoire vendor.
 
-Toutefois, il est possible d'ajouter des dépendances dans le composer.json prévu à cet effet. Sur ALPC, c'est ce que nous avons fait, pour les libs elasticsearch et pour les libs des API des reseaux sociaux.
+Toutefois, il est possible d'ajouter des dépendances dans le fichier `composer.json` prévu à cet effet. Sur ALPC, c'est ce que nous avons fait, pour les libs ElasticSearch et pour les libs des API des réseaux sociaux.
 
 ### 5.2 - Bien mais pas top
 
-Mais celà a pose un problème dans les procedures de mise à jour. En effet, lors d'une mise a jour du core (sans composer) on recupere toutes les sources, y compris le repertoire vendor qui ne contient pas nos dependances ajoutées, il faut donc faire un backup et merger tout ça à la main, pas tres pratique.
+Mais cela a posé un problème dans les procedures de mises à jour. En effet lors d'une mise à jour du cœur (sans Composer) on récupere toutes les sources, y compris le répertoire vendor qui ne contient pas nos dependances ajoutées, il faut donc faire un backup et merger tout ça à la main, pas très pratique.
 
-Pour ALPC, vu le faible nombre de dependances spécifiques du projet, on a fait avec : utilisé composer sur les postes de dev uniquement et versionné tous les vendor.  
-Lors des mise a jour du core, on a fait attention (pour la vérité historique, j'ai d'abord tout cassé sans rien comprendre, puis j'ai refléchis, et ensuite j'ai fais gaffe).
+Pour ALPC, vu le faible nombre de dépendances spécifiques du projet, on a fait avec. Nous avons utilisé Composer sur les postes de dev uniquement et versionné tous les vendor.  
+Lors des mises à jour du cœur, on a fait attention (pour la vérité historique, j'ai d'abord tout cassé sans rien comprendre, puis j'ai réfléchi, et ensuite j'ai fais attention).
 
 ### 5.3 - drupal-project
 
-Pour les prochaines fois, une solution complète est proposée par ce projet : 
+Pour les prochaines fois, une solution complète est proposée par ce projet :
 [https://github.com/drupal-composer/drupal-project](https://github.com/drupal-composer/drupal-project)  
-Dans cette approche full composer, toutes les dependances du projet (incluant le core de drupal et les modules contrib) sont gérées par composer, ce qui permet de ne versionner que le nécessaire et d'automatiser les mise à jours et les déploiements.
+Dans cette approche full composer, toutes les dépendances du projet (incluant le cœur de Drupal et les modules contrib) sont gérées par Composer, ce qui permet de ne versionner que le nécessaire et d'automatiser les mises à jour et les déploiements.
 
-Il y aura peut être un article KB sur cet outils prochainement.
+Il y aura peut être un article KB sur cet outil prochainement.
 
 ## 6 - Contact form
 
