@@ -126,9 +126,25 @@ node
 <h3>{{ items|first.content }}</h3>
 ```
 
+Les templates peuvent donc être peu nombreux et tres génériques, un seul template peut servir à rendre tous les champs d'une entité, ou tous les éléments d'un formulaire. Mais ils peuvent aussi nombreux et tres spécifiques chaque champ peut avoir sa logique d'intégration propre.
+
+Pour celà Drupal 8 utilise un systeme de convention de nommage des templates.
+par exemple : `field.html.twig` est le nom du template générique pour tous les champs, de toutes les entités, `field--field-alpc-article-location.html.twig` est le template spécifique du champ dont le nom machine est `field_alpc_article_location`. Le template chargé par Drupal sera toujours le plus spécifique disponible.
+
+La convention de nommage qui permet d'utiliser le nom d'un champ est native, mais il arrive frequement que l'on souhaite dériver un template sur la base d'autres éléments du contexte. Pour résoudre ce problème, sur ALPC nous avons utilisé le theme de base [Cleverdrop](https://github.com/dom18fr/cleverdrop). Ses 2 rôles principaux sont :
+
+  * Enrichir les convention de nommages de templates, permettant ainsi une plus grane spécificité des templates.
+  * Fournir des templates générique simplifiés (plus légers que ceux fournis par Drupal nativement)
+
+Il devient ainsi facile de reproduire n'importe quel intégration statique, sans écrire de php, simplement en créant et nommant des templates d'elements.
+
 ### 4.2 - Attributes
 
 Le Twig de Drupal inclut également la gestion d'une objet de type `Attributes`. Il s'agit d'une structure portant des attributs html. Cet objet expose de multiples méthodes permettant de manipuler des attributs à la volée au moment de les afficher.
+
+Cet objet Attributes permet de transmettre au templates des attributs définits en amont (au niveau d'un module par exemple) tout en laissant la ligerté au front d'y ajouter ceux qui relevent de la logique de theming, typiquement des classes css.
+
+En effet dans la logique de séparation theme / module de drupal, tout le html n'est pas laissé à la responsabilité du thème. Le thème n'a qu'un rôle cosmetique. Certains attributs ou balises html peuvent être nécessaire fonctionnelement, comme par exemple les attributs des éléments de formulaire (action, method, name etc ...). Ceux là doivent pouvoir être définits dans un module et passé aux templates du thème.
 
 Par exemple, le template des titres secondaires dans les articles d'ALPC :
 
@@ -139,13 +155,14 @@ Par exemple, le template des titres secondaires dans les articles d'ALPC :
 </section>
 ```
 
-En Drupal 7, ce type de manipulation devait se faire dans un preprocess en php.
+Les titres secondaires des pages doivent avoir un attribut id, de manière à être navigables par ancres. L'attribut id de chaque titre est donc créé par un module  et se retrouve dans l'objet attributes.
 
-### 4.3 - Laissons les dev front travailler et les contributeurs contribuer !
+
+### 4.4 - Laissons les dev front travailler et les contributeurs contribuer !
 
 D'une manière générale l'intégration de Twig et son imbrication dans la render API de Drupal permet une grande souplesse de contribution, y compris s'agissant du layout des éléments, et ce sans franchir la frontière (interdite) de la contribution de html et css en back-office. Il devient possible (plus encore qu'en D7) de déléguer aux contributeurs la construction du puzzle et aux dev front la responsabilité du design des pièces.
 
-Par ailleurs, le thème Drupal peut désormais être entièrement géré par les dev front, sans connaissances particulières de Drupal ou même de PHP.  
+Le thème Drupal peut désormais être entièrement géré par les dev front, sans connaissances particulières de Drupal ou même de PHP.  
 Là où en D7 une tres large partie du code PHP custom d'un projet se trouvait dans le thème, en D8 le thème peut (doit) être constitué exclusivement de Templates Twig, de feuilles de style, de fichiers js et d'assets (images, svg, json etc...)
 
 Amis intégrateurs, les seules prérequis sont :
@@ -156,6 +173,7 @@ Amis intégrateurs, les seules prérequis sont :
 
 Sur ALPC, pour des raisons de planning principalement, nous n'avons pas pu mettre en œuvre ce principe, ce sont les dev Drupal qui se sont chargés d'écrire les templates à partir d'une intégration statique réalisée en amont. Par ailleurs, le thème ALPC embarque malheureusement quelques lignes de code PHP.  
 Mais la prochaine fois c'est la bonne :)
+
 
 ## 5 - Composer
 
@@ -670,6 +688,24 @@ Même si le module features nous a permis pendant des année de déployer avec s
 
 * Conséquemmet au point précédent, il existe de nombreuse méthodes différentes pour écrire de la conf dans le code (update) et pour faire le chemin inverse lors du déploiement (revert), dont certaines dépendent d'API externes (ctools par exemple). Le code généré par Features est donc complexe, hétérogène, et peu robuste.
 
-### 11.3 - CMI & Drupal 8
+### 11.3 - Configuration management & Drupal 8
+
+Avec Drupal 8 est arrivé la notion de config management. Il s'agit d'une vaste remise à plat des concepts liés au stockage des configurations.
+
+En Drupal 8, les configurations ne peuvent être que de 2 types :
+
+  * Simple config : pour les structures simples et uniques
+  * Config entities : pour les types structures plus élaborées, pouvant avoir plusieurs "instances".
+
+Par exemple, les infos relatives au site (nom du site, email du site) sont stockées dans une simple config (system.site). Une vue est une instance du type de config entity "views.view" (ex. views.view.alpc_agenda)
+
+Toutes peuvent être écrites dans le code sous la forme d'un fichier .yml
+On peut ainsi écrire dans le code l'état de nos configuration en base, déployer le code et remonter la configuration sur un environnement différent. Ces mécanisme d'import / export sont natifs et peuvent être fait en ligne de commande.
+
+Les configurations peuvent être écrites comme un ensemble unique, dans un seul répertoire, en tant "la config du site", ou peuvent être embarquées au sein d'un module, chaque module fournissant ainsi les éléments de configurations qui lui sont relatives. A noté que si le config management est capable de gérer les dépendances entre les configuration d'un même lot, ce n'est pas le cas pour des configurations qui vivent séparement dans des modules.
+
+
 
 ### 11.4 - Features 8.x & ALPC :(
+
+Au lancement des developpements d'ALPC
